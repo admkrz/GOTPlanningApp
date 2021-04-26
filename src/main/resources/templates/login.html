@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org"
+      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+<head>
+    <title>Login</title>
+    <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+    <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="/css/loginform.css">
+</head>
+<body>
+<div th:if="${param.error}">
+    Invalid username and password.
+</div>
+<div class="wrapper fadeInDown">
+    <div id="formContent">
+        <form th:action="@{/loginUser}" method="post">
+            <input type="text" id="email" class="fadeIn second" name=email placeholder="email" value="user1@gmail.com">
+            <input type="text" id="passw" class="fadeIn third" name="passw" placeholder="hasło" value="1234">
+            <input type="submit" class="fadeIn fourth" value="Zaloguj">
+        </form>
+    </div>
+</div>
+
+</body>
+</html>

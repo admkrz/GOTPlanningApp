@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Górska Odznaka Turystyczna</title>
+    <meta name="description" content=""/>
+    <meta name="viewport" content="width=device-width"/>
+    <base href="/"/>
+    <link href="/css/bootstrap.min.css" type="text/css" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="/css/selectableTable.css">
+    <link rel="stylesheet" type="text/css" href="/css/mytablescroll.css">
+    <link rel="stylesheet" type="text/css" href="/css/mybtn.css">
+    <link rel="stylesheet" type="text/css" href="/css/modalblur.css">
+
+    <script type="text/javascript" src="/selectableTable.js"></script>
+
+    <script type="text/javascript" src="/webjars/jquery/3.5.1/jquery.min.js"></script>
+    <script type="text/javascript" src="/webjars/bootstrap/4.5.3/js/bootstrap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jQuery-slimScroll/1.3.8/jquery.slimscroll.min.js"></script>
+
+    <script>
+        function showModal2(){
+            $("#myModalCanceled").modal("toggle");
+        }
+    </script>
+</head>
+<body style="width: 100%; height: 100%;">
+<div class="supreme-container">
+<div class="row" style="width: 60%; margin-left: auto; margin-right: auto; margin-top: 150px;" th:if="${trip != null}">
+    <div class="col"><h2 align="center">Informacje o wycieczce:</h2></div>
+    <div class="col"><h2 align="center">Wycieczka złożona jest z tras:</h2></div>
+</div>
+<div class="row" th:if="${trip != null}" style="width: 60%; margin-left: auto; margin-right: auto;">
+    <div class="col">
+        <table class="mytablescroll2" style="width: 100%;" th:if="${trip != null}">
+            <tbody>
+            <tr style="height: 70px;">
+                <td><strong>Data rozpoczęcia</strong></td>
+                <td th:text="${trip.getStartDate().toString()}"></td>
+            </tr>
+            <tr style="height: 70px;">
+                <td><strong>Planowana data zakończenia</strong></td>
+                <td th:text="${trip.getEndDate().toString()}"></td>
+            </tr>
+            <tr style="height: 70px;">
+                <td><strong>Liczba uczestników</strong></td>
+                <td th:text="${trip.getMembers().size()+1}"></td>
+            </tr>
+            <tr style="height: 70px;">
+                <td><strong>Długość tras [m]</strong></td>
+                <td th:text="${trip.getLength()}"></td>
+            </tr>
+            <tr style="height: 70px;">
+                <td><strong>Suma przewyższeń [m]</strong></td>
+                <td th:text="${trip.getSumOfHeights()}"></td>
+            </tr>
+            <tr style="height: 70px;">
+                <td><strong>Suma punktów</strong></td>
+                <td th:text="${trip.getSumOfPoints()}"></td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+    <div class="col text-center">
+        <table class="mytablescroll example-table" style="width: 100%;" th:if="${trip != null}">
+            <thead>
+                <tr>
+                    <th>Nazwa</th>
+                    <th>Długość [m]</th>
+                    <th>Przewyższenie [m]</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="segm : ${trip.getSegments()}" th:attr="rowid=${segm.getId()}" onclick="toggleClass(this,'selected');">
+                    <td th:text="${segm.toString()}"></td>
+                    <td th:text="${segm.getLength()}"></td>
+                    <td th:text="${segm.getHeight()}"></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+<div class="row" style="width: 60%; margin-left: auto; margin-right: auto;">
+    <div class="col text-center" align="left">
+        <button type="button" class="btn mybtn" style="width: 50%; padding-right: 0;" onclick="location.href='/user/trips'">Powrót</button>
+    </div>
+    <div class="col text-center" align="center" th:if="${trip != null and trip.getStatus()==trip.getStatus().Planned}">
+        <button type="button" class="btn mybtn" style="width: 100%; padding-right: 0;" data-target="#myModal" data-toggle="modal" >Zakończ wycieczkę</button>
+    </div>
+</div>
+
+<script>
+    $('.example-table tbody').slimscroll({
+        height: '600px',
+        alwaysVisible: true,
+        color: '#333'
+    })
+</script>
+</div>
+
+<div class="container">
+    <div class="modal fade" id="myModal" role="dialog">
+        <div class="modal-dialog">
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-body text-center">
+                    <p>Czy wycieczka się odbyła?</p>
+                </div>
+                <div class="modal-footer" style="width: 100%; display: flex;">
+                    <button type="button" class="btn mybtn" style="float: left; width: 40%; transform: translateX(-40%);"
+                            data-dismiss="modal" th:data-url="${'/user/trip/toverify/'+ trip.getId()}"
+                            onclick="window.location.href=this.getAttribute('data-url')">Tak</button>
+                    <button type="button" class="btn mybtn" style="float: right; width: 40%;"
+                            data-dismiss="modal"  th:data-url="${'/user/trip/cancel/'+ trip.getId()}"
+                            onclick="window.location.href=this.getAttribute('data-url')">Nie</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container">
+    <div class="modal fade" id="myModalCanceled" role="dialog">
+        <div class="modal-dialog">
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-body">
+                    <p>Wycieczka oznaczona jako niezrealizowana</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn mybtn mr-auto"
+                            data-dismiss="modal" th:style="'width: 100%; border: 2px solid black;'"
+                            onclick="location.href='/user/trips'">Tak</button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+<script th:if="${tripCanceled}">showModal2();</script>
+
+
+</body>
+</html>

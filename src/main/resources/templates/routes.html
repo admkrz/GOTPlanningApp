@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Górska Odznaka Turystyczna</title>
+    <meta name="description" content=""/>
+    <meta name="viewport" content="width=device-width"/>
+    <base href="/"/>
+    <link href="/css/bootstrap.min.css" type="text/css" rel="stylesheet">
+    <link rel="stylesheet" href="/css/tourist.css">
+    <link rel="stylesheet" href="/css/selectableTable.css">
+    <link rel="stylesheet" href="/css/mytablescroll.css">
+
+    <script type="text/javascript" src="/webjars/jquery/3.5.1/jquery.min.js"></script>
+    <script type="text/javascript" src="/webjars/bootstrap/4.5.3/js/bootstrap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jQuery-slimScroll/1.3.8/jquery.slimscroll.min.js"></script>
+
+    <style>
+        body {
+            width: 100%;
+            height: auto;
+            font-family: sans-serif;
+            font-size: 0.9em;
+        }
+
+        table {
+            width: 76%;
+            border-collapse: collapse;
+            margin-left: auto;
+            margin-right: auto;
+            border-bottom: 1px solid #ddd;
+        }
+
+        th, td {
+            text-align: center;
+            vertical-align: middle;
+            padding: 4px 6px;
+            border: 1px solid #ddd;
+            box-sizing: border-box;
+            width: 12%;
+        }
+    </style>
+</head>
+<body>
+<div class="supreme-container">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <a class="navbar-brand" href="/">Górska Odznaka Turystyczna</a>
+        <button class="navbar-toggler collapsed" type="button" data-toggle="collapse" data-target="#navbarColor02"
+                aria-controls="navbarColor02" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="navbar-collapse collapse" id="navbarColor02" style="">
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item"><a class="nav-link" href="/"><i class="fas fa-user-circle"></i> Twoje konto</a>
+                </li>
+                <li class="nav-item"><a class="nav-link" href="/logout"><i class="fas fa-sign-out-alt"></i> Wyloguj</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+</div>
+
+
+<br/>
+<div class="row">
+    <div class="col"><h1 align="center">Wykaz tras punktowanych</h1></div>
+</div>
+<br/>
+<div class="row text-center" style="width: 56%; margin-left: auto; margin-right: auto;">
+    <div class="col text-left">
+        <button type="button" class="btn btn-outline-secondary" onclick="location.href='/routes'">Przeglądaj wszystkie
+            trasy
+        </button>
+    </div>
+    <div class="col text-center">
+        <a href="#" data-target="#filterModal" data-toggle="modal" class="btn btn-outline-secondary"
+           th:data-mountainGroup="${selectedMountainGroup}"
+           th:onclick="|setModalParams('${minPoints}','${maxPoints}','${minLength}','${maxLength}','${minHeight}','${maxHeight}')|">
+            Filtruj wyświetlane trasy</a>
+    </div>
+    <div class="col text-right">
+        <form th:action="@{/routes}">
+            <button type="submit" class="btn btn-outline-secondary"
+                    th:name="disabled" th:value="true">Przeglądaj trasy wyłączone
+            </button>
+        </form>
+    </div>
+</div>
+<br>
+
+<div th:switch="${disabled}">
+    <div th:case="false">
+        <div th:switch="${routesNotFound}">
+            <table id="example" class="display" style="display:block;" th:case="false">
+                <thead style="background-color: lightgray; color: black; display: table; width: 100%;">
+                <tr>
+                    <th style="width: 5%;">Lp.</th>
+                    <th>Punkt początkowy</th>
+                    <th>Punkt końcowy</th>
+                    <th>Kolor szlaku</th>
+                    <th>Grupa Górska</th>
+                    <th style="width: 9%;">Długość</th>
+                    <th style="width: 10%;">Przewyższenie</th>
+                    <th style="width: 10%;">Przewyższenie przeciwnie</th>
+                    <th style="width: 9%;">Punkty GOT</th>
+                    <th style="width: 9%;">Punkty GOT przeciwnie</th>
+                    <th style="width: 16px;"></th>
+                </tr>
+                </thead>
+                <tbody style="display: block; height: auto; max-height: 300px; overflow-y: scroll;">
+                <tr th:each="route, iter : ${routes}">
+                    <td style="width: 5%;" th:text="${iter.index+1}"></td>
+                    <td th:text="${route.getStartingPoint().getLocation()}"></td>
+                    <td th:text="${route.getEndingPoint().getLocation()}"></td>
+                    <td th:text="${route.getColor()}"></td>
+                    <td th:text="${route.getGroup().getCode()}"></td>
+                    <td style="width: 9%;" th:text="${route.getLength()}"></td>
+                    <td style="width: 10%;" th:text="${route.getHeight()}"></td>
+                    <td style="width: 10%;" th:text="${route.getHeightRev()}"></td>
+                    <td style="width: 9%;" th:text="${route.getPoints()}"></td>
+                    <td style="width: 9%;" th:text="${route.getPointsRev()}"></td>
+                </tr>
+                </tbody>
+            </table>
+            <div class="row text-center" th:case="true" style="width: 56%; margin-left: auto; margin-right: auto">
+                <div class="card border-warning" style="width: 100%;">
+                    <h3 class="card-header">Nie znaleziono tras o podanych parametrach</h3>
+                    <div class="card-body">
+                        <p class="card-text">Zmień bądź usuń parametry filtrowania tras aby wyświetlić wyniki!</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <table id="exampleDisabled" class="display" style="display:block;" th:case="true">
+        <thead style="background-color: lightgray; color: black; display: table; width: 100%;">
+        <tr>
+            <th style="width: 20%;">Punkt początkowy</th>
+            <th style="width: 20%;">Punkt końcowy</th>
+            <th style="width: 20%;">Kolor szlaku</th>
+            <th style="width: 20%;">Grupa Górska</th>
+            <th style="width: 20%;">Data zamknięcia</th>
+        </tr>
+        </thead>
+        <tbody style="display: block; height: auto; max-height: 200px; overflow-y: scroll;">
+        <tr th:each="route, iter : ${routes}">
+            <td style="width: 20%;" th:text="${route.getStartingPoint().getLocation()}"></td>
+            <td style="width: 20%;" th:text="${route.getEndingPoint().getLocation()}"></td>
+            <td style="width: 20%;" th:text="${route.getColor()}"></td>
+            <td style="width: 20%;" th:text="${route.getGroup().getCode()}"></td>
+            <td style="width: 20%;" th:text="${route.getDisablementDate()}"></td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+<br>
+<div class="row" style="width: 56%;  margin-left: auto; margin-right: auto;">
+    <div class="col">
+        <button type="button" class="btn btn-outline-secondary" onclick="location.href='/'">Powrót</button>
+    </div>
+</div>
+
+
+<div class="modal fade" id="filterModal" role="dialog" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">Filtruj wyświetlane trasy</h3>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form th:action="@{/routes}">
+                    <div class="row mb-4">
+                        <div class="col">
+                            <label for="selectMountainGroup" class="mr-3">Grupa górska: </label>
+                        </div>
+                        <div class="col">
+                            <select class="custom-select" th:name="mountainGroup" id="selectMountainGroup">
+                                <option value="empty">Wybierz grupę</option>
+                                <option th:each="mountainGroup : ${mountainGroups}"
+                                        th:value="${mountainGroup.getCode()}"
+                                        th:text="${mountainGroup.getCode()}+' '+${mountainGroup.getName()}"></option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col">
+                            <label for="minPointsRange" class="mr-3">Minimalna liczba punktów GOT: </label>
+                        </div>
+                        <div class="col">
+                            <input type="range" value="0" class="form-range mr-3" min="0" max="20" id="minPointsRange"
+                                   th:name="minPoints" oninput="this.nextElementSibling.value = this.value">
+                            <output th:text="${minPoints}"></output>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col">
+                            <label for="maxPointsRange" class="mr-3">Maksymalna liczba punktów GOT: </label>
+                        </div>
+                        <div class="col">
+                            <input type="range" value="0" class="form-range mr-3" min="0" max="20" id="maxPointsRange"
+                                   th:name="maxPoints" oninput="this.nextElementSibling.value = this.value">
+                            <output th:text="${maxPoints}"></output>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col">
+                            <label for="minLengthRange" class="mr-3">Minimalna długość: </label>
+                        </div>
+                        <div class="col">
+                            <input type="range" value="0" class="form-range mr-3" min="0" max="20" step="0.1"
+                                   id="minLengthRange"
+                                   th:name="minLength" oninput="this.nextElementSibling.value = this.value">
+                            <output th:text="${minLength}"></output>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col">
+                            <label for="maxLengthRange" class="mr-3">Maksymalna długość: </label>
+                        </div>
+                        <div class="col">
+                            <input type="range" value="0" class="form-range mr-3" min="0" max="20" step="0.1"
+                                   id="maxLengthRange"
+                                   th:name="maxLength" oninput="this.nextElementSibling.value = this.value">
+                            <output th:text="${maxLength}"></output>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col">
+                            <label for="minHeightRange" class="mr-3">Minimalne przewyższenie: </label>
+                        </div>
+                        <div class="col">
+                            <input type="range" value="0" class="form-range mr-3" min="0" max="999" id="minHeightRange"
+                                   th:name="minHeight" oninput="this.nextElementSibling.value = this.value">
+                            <output th:text="${minHeight}"></output>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col">
+                            <label for="maxHeightRange" class="mr-3">Maksymalne przewyższenie: </label>
+                        </div>
+                        <div class="col">
+                            <input type="range" value="0" class="form-range mr-3" min="0" max="1000" id="maxHeightRange"
+                                   th:name="maxHeight" oninput="this.nextElementSibling.value = this.value">
+                            <output th:text="${maxHeight}"></output>
+                        </div>
+                    </div>
+                    <input type="submit" id="formSubmit" hidden/>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">Anuluj</button>
+                <button type="submit" class="btn btn-outline-secondary" id="filterRoutes">Filtruj trasy</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script th:inline="javascript">
+    /*<![CDATA[*/
+
+    /*
+    $(document).ready(function () {
+        $('.display tbody').slimscroll({
+            height: '100%',
+            alwaysVisible: true,
+            color: '#333'
+        });
+    });*/
+
+
+    $('#filterRoutes').click(function () {
+        document.getElementById('formSubmit').click();
+    });
+
+    function setModalParams(minPoints, maxPoints, minLength, maxLength, minHeight, maxHeight) {
+        document.getElementById('selectMountainGroup').value = /*[[${selectedMountainGroup}]]*/ 'empty';
+        document.getElementById('minPointsRange').value = minPoints;
+        document.getElementById('maxPointsRange').value = maxPoints;
+        document.getElementById('minLengthRange').value = minLength;
+        document.getElementById('maxLengthRange').value = maxLength;
+        document.getElementById('minHeightRange').value = minHeight;
+        document.getElementById('maxHeightRange').value = maxHeight;
+    }
+
+    /*]]>*/
+</script>
+
+</body>
+</html>
+

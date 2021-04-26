@@ -1,0 +1,89 @@
+.mybtn {
+    color: #6c757d;
+    background-color: transparent;
+    background-image: none;
+    border-color: #6c757d;
+    float: left;
+}
+
+.mybtn:hover {
+    color: #fff;
+    background-color: #6c757d;
+    border-color: #6c757d;
+}
+
+.mybtn:focus, .mybtn.focus {
+    box-shadow: 0 0 0 0.2rem rgba(108, 117, 125, 0.5);
+}
+
+.mybtn.disabled, .mybtn:disabled {
+    color: #6c757d;
+    background-color: transparent;
+}
+
+.mybtn:not(:disabled):not(.disabled):active, .mybtn:not(:disabled):not(.disabled).active,
+.show > .mybtn.dropdown-toggle {
+    color: #fff;
+    background-color: #6c757d;
+    border-color: #6c757d;
+}
+
+.mybtn:not(:disabled):not(.disabled):active:focus, .mybtn:not(:disabled):not(.disabled).active:focus,
+.show > .mybtn.dropdown-toggle:focus {
+    box-shadow: 0 0 0 0.2rem rgba(108, 117, 125, 0.5);
+}
+
+.mytable {
+    border-collapse: collapse;
+    width: 100%;
+}
+.mytable td {
+    font-size: 14px;
+    padding: 10px 20px;
+    overflow: hidden;
+    word-break: normal;
+    color: #333;
+    border-left: 1px solid #ccc;
+    border-right: 1px solid #ccc;
+    border-bottom: 1px solid #ccc;
+    background-color: #FFFFFF;
+    font-family:"Courier New", Courier, monospace !important;
+    text-align: center;
+}
+.mytable th {
+    font-weight: bold;
+    font-family:"Courier New", Courier, monospace !important;
+    text-align: center;
+    font-size: 14px;
+    border: 1px solid #ccc;
+    border-bottom: 2px solid #ccc;
+    padding: 10px 20px;
+    word-break: normal;
+    color: #333;
+    background-color: #F0F0F0;
+}
+.tablealign {
+    float: right;
+    padding-left: 3%;
+    padding-right: 10%;
+    width: 40%;
+    height: 200px;
+    border-radius: 3px;
+    padding-bottom: 50px;
+}
+tbody {
+    overflow-y: scroll;
+    overflow-x: hidden;
+    height: 100px;
+    display: block;
+}
+thead {
+    display:table;
+    width: calc(100% - 17px);
+    table-layout:fixed;
+}
+tbody tr {
+    table-layout: fixed;
+    display:table;
+    width:100%;
+}

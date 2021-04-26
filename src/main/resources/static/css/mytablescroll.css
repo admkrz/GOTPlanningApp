@@ -1,0 +1,83 @@
+html, body {
+    width: 100%;
+}
+
+.mytablescroll {
+
+}
+.mytablescroll body {
+    width: 100%;
+    font-family: sans-serif;
+    font-size: 0.9em;
+}
+.mytablescroll table {
+    width: 100%;
+    border-collapse: collapse;
+    border-bottom: 1px solid #ddd;
+    margin-left: auto;
+    margin-right: auto;
+}
+.mytablescroll thead {
+    background-color: lightgray;
+    color: black;
+}
+.mytablescroll thead,tbody {
+    display: block;
+    width: 100%;
+}
+.mytablescroll th,td {
+    text-align: center;
+    vertical-align: middle;
+    padding: 8px 10px;
+    border: 1px solid #ddd;
+    width: 14.29%;
+    box-sizing: border-box;
+}
+.mytablescroll tbody {
+    height: 600px;
+    overflow-y: scroll;
+}
+
+.inlineTable {
+    display: inline-block;
+}
+
+.mytablescroll2 {
+
+}
+.mytablescroll2 body {
+    width: 100%;
+    font-family: sans-serif;
+    font-size: 0.9em;
+}
+.mytablescroll2 table {
+    width: 100%;
+    border-collapse: collapse;
+    border-bottom: 1px solid #ddd;
+    margin-left: auto;
+    margin-right: auto;
+}
+.mytablescroll2 thead {
+    background-color: lightgray;
+    color: black;
+}
+.mytablescroll2 thead,tbody {
+    display: block;
+    width: 100%;
+}
+.mytablescroll2 th,td {
+    text-align: center;
+    vertical-align: middle;
+    padding: 8px 10px;
+    border: 1px solid #ddd;
+    height: 40px;
+    box-sizing: border-box;
+}
+
+.mytablescroll2 tr {
+    height: 40px;
+}
+
+.mytablescroll2 tbody {
+    height: 400px;
+}

@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Górska Odznaka Turystyczna</title>
+    <meta name="description" content=""/>
+    <meta name="viewport" content="width=device-width"/>
+    <base href="/"/>
+    <link href="/css/bootstrap.min.css" type="text/css" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="/css/modalblur.css">
+
+    <script type="text/javascript" src="/webjars/jquery/3.5.1/jquery.min.js"></script>
+    <script type="text/javascript" src="/webjars/bootstrap/4.5.3/js/bootstrap.min.js"></script>
+
+    <script>
+        function showModal(){
+            $('#myModal').modal('toggle');
+        }
+    </script>
+</head>
+<body>
+<div class="supreme-container">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <a class="navbar-brand" href="/">Górska Odznaka Turystyczna</a>
+        <button class="navbar-toggler collapsed" type="button" data-toggle="collapse" data-target="#navbarColor02"
+                aria-controls="navbarColor02" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="navbar-collapse collapse" id="navbarColor02" style="">
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item"><a class="nav-link" href="/"><i class="fas fa-user-circle"></i> Twoje konto</a>
+                </li>
+                <li class="nav-item"><a class="nav-link" href="/logout"><i class="fas fa-sign-out-alt"></i> Wyloguj</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <br/><br/>
+    <div th:if="${tourist == null}">
+        Błąd! Przeloguj się!
+    </div>
+
+    <div class="row" th:if="${tourist != null}">
+        <div class="col ml-5"><img src="badge.png" class="rounded float-left " height="150" width="150"></div>
+        <div class="col"><h1 align="center">Twoje konto</h1></div>
+        <div class="col mr-5"><img src="logo.png" class="rounded float-right" height="150" width="150"></div>
+    </div>
+    <div class="row" th:if="${tourist != null}">
+        <div class="col ml-5 mr-5 mt-5">
+            <table class="table table-hover">
+                <tbody>
+
+                <tr>
+                    <th scope="col"><strong>Imie</strong></th>
+                    <td th:text="${tourist.getName()}"></td>
+                </tr>
+                <tr>
+                    <th scope="col"><strong>Nazwisko</strong></th>
+                    <td th:text="${tourist.getSurname()}"></td>
+                </tr>
+                <tr>
+                    <th scope="col"><strong>Email</strong></th>
+                    <td th:text="${tourist.getEmail()}"></td>
+                </tr>
+                <tr>
+                    <th scope="col"><strong>Numer telefonu</strong></th>
+                    <td th:text="${tourist.getPhoneNumber()}"></td>
+                </tr>
+                <tr>
+                    <th scope="col"><strong>Adres</strong></th>
+                    <td th:text="${tourist.getAddress()}"></td>
+                </tr>
+                <tr>
+                    <th scope="col"><strong>Miasto</strong></th>
+                    <td th:text="${tourist.getCity()}"></td>
+                </tr>
+                <tr>
+                    <th scope="col"><strong>Kod pocztowy</strong></th>
+                    <td th:text="${tourist.getZipCode()}"></td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="col ml-5 mr-5 mt-5 text-center">
+            <p>Liczba punktów: <strong th:text="${tourist.getSumOfPoints()}+'/'+${nextPoints}"></strong></p>
+            <div class="progress" style=" height: 40px;">
+                <div class="progress-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 25%;'">
+                    <strong style="color:white;" th:text="${nextBadge}"></strong>
+                </div>
+            </div>
+            <br/>
+            <p>Posiadana odznaka:
+                <strong th:if="${badge}" th:text="${badge}"></strong>
+                <strong th:unless="${badge}" th:text="ŻADNA"></strong>
+            </p>
+            <br>
+            <br>
+            <h2>Ostatnia wycieczka:</h2>
+            <br/>
+            <p th:text="${lastTrip}"></p>
+        </div>
+    </div>
+    <div class="row mt-5 ml-5 mr-5" th:if="${tourist != null}">
+
+        <div class="col-md-3 text-center">
+            <button type="button" class="btn btn-outline-secondary" style="width: 90%">Edytuj Dane</button>
+        </div>
+        <div class="col-md-3 text-center">
+            <button type="button" class="btn btn-outline-secondary" style="width: 90%">Przeglądaj zdobyte odznaki</button>
+        </div>
+        <div class="col-md-3 text-center">
+            <button type="button" class="btn btn-outline-secondary" onclick="location.href='/user/trips'" style="width: 90%">Pokaż moje wycieczki</button>
+        </div>
+        <div class="col-md-3 text-center">
+            <button type="button" class="btn btn-outline-secondary" onclick="location.href='/routes'" style="width: 90%">Przeglądaj trasy</button>
+        </div>
+    </div>
+    <div class="row mt-5 ml-5 mr-5" th:if="${tourist != null}">
+        <div class="col-md-4"></div>
+        <div class="col-md-4 text-center">
+            <button type="button" class="btn btn-outline-secondary" onclick="location.href='/planTrip'" style="width: 90%">Zaplanuj Wycieczkę</button>
+        </div>
+    </div>
+</div>
+
+<div class="container">
+    <div class="modal fade" id="myModal" role="dialog">
+        <div class="modal-dialog">
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">Brak wycieczek</h4>
+                </div>
+                <div class="modal-body">
+                    <p>Nie posiadasz jeszcze żadnych zaplanowanych lub odbytych wycieczek. Zaplanuj swoją pierwszą wycieczkę juz dziś!.</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default mr-auto" data-dismiss="modal" th:style="'width: 100%; border: 2px solid black;'" onclick="location.href='/'">Ok</button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="savedModal" role="dialog" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">Zapisano wycieczkę</h3>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p th:text="${saved}"></p>
+            </div>
+            <div class="modal-footer text-center">
+                <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">OK</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script th:inline="javascript">
+    /*<![CDATA[*/
+    $(document).ready(function(){
+        if (/*[[${savedTrip}]]*/ 'false') {
+            $("#savedModal").modal('show');
+        }
+    });
+    /*]]>*/
+</script>
+
+<script th:if="${param.noTrips}">showModal()</script>
+
+
+</body>
+</html>
+
